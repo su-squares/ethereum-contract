@@ -30,7 +30,7 @@ This bounty program will run within the Ropsten network from **2018-03-01 at 00:
 
 - Issues that have already been published here or are already disclosed to the Su Squares team are not eligible for rewards
 
-- Social engineering, XKCD#538 attacks, bringing down Ropsten/Metamask/Infura are not in scope and will be paid a reward
+- Social engineering, XKCD#538 attacks, bringing down Ropsten/Metamask/Infura are not in scope and will NOT be paid a reward
 
 - Only the contract above is in scope, our website is not in scope
 
