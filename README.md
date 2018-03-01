@@ -12,7 +12,7 @@ You can personalize your Su Square by adding an image, text and a hyperlink to y
 
 ## The scope of this bounty program
 
-This bounty program will run within the Ropsten network from 2018-03-01 at 00:01 GMT to 2018-03-04 at 23:59 GMT. All of the discussions and code in this bounty program are publicly available in this repository. Help us find any problems with this contract and with ERC-721 in general:
+This bounty program will run within the Ropsten network from **2018-03-01 at 00:01 GMT** to **2018-03-04 at 23:59 GMT**. All of the discussions and code in this bounty program are publicly available in this repository. Help us find any problems with this contract and with ERC-721 in general:
 
 - Overflow or break parts of the program
 
