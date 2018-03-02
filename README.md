@@ -1,4 +1,10 @@
-# Su Squares Bounty Program
+# Su Squares Bounty Program IS NOW CLOSED
+
+Thank you to everyone for participating! Please stay tuned while we tabulate the leaderboard and rewards!
+
+---
+
+---
 
 Su Squares Bounty Program recognizes necessity of security researchers to keep our community secure and fun. Su Squares is launching very soon and we will love if the community can help to find and disclose security vulnerabilities via this bounty program.
 
@@ -20,7 +26,7 @@ This bounty program will run within the Ropsten network from **2018-03-01 at 00:
 
 - Take over an admin account
 
-- Give a square to somebody else and double spend it or revert it back to your control 
+- Give a square to somebody else and double spend it or revert it back to your control
 
 - Any undocumented and unintuitive behavior
 
