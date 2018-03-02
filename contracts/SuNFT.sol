@@ -79,7 +79,7 @@ contract SuNFT is ERC721, ERC721Metadata, ERC721Enumerable, ERC165, PublishInter
 
     /// @notice Transfers the ownership of an NFT from one address to another address
     /// @dev This works identically to the other function with an extra data parameter,
-    ///  except this function just sets data to []
+    ///  except this function just sets data to ""
     /// @param _from The current owner of the NFT
     /// @param _to The new owner
     /// @param _tokenId The NFT to transfer
