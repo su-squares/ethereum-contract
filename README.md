@@ -1,5 +1,7 @@
 # Su Squares Bounty Program
 
+**Now featured on GitCoin, you can check them out here https://twitter.com/GetGitcoin**
+
 Su Squares Bounty Program recognizes necessity of security researchers to keep our community secure and fun. Su Squares is launching very soon and we will love if the community can help to find and disclose security vulnerabilities via this bounty program.
 
 ## What you need to know about Su Squares
