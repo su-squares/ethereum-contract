@@ -1,8 +1,13 @@
 # Su Squares Bounty Program IS NOW CLOSED
 
-Thank you to everyone for participating! Please stay tuned while we tabulate the leaderboard and rewards!
+Thank you to everyone for participating!
 
----
+**Leaderboard & rewards:**
+
+| Issue                     | Researcher | Reward            |
+| ------------------------- | ---------- | ----------------- |
+| #2 Incorrect price        | @sz-piotr  | 1 square          |
+| #1 Incorrect comment `[]` | @sz-piotr  | 1 square          |
 
 ---
 
