@@ -1,18 +1,24 @@
-pragma solidity ^0.4.20;
+pragma solidity ^0.4.21;
 
 import "./ERC165.sol";
 
 /// @title A reusable contract to comply with ERC-165
 /// @author William Entriken (https://phor.net)
 contract PublishInterfaces is ERC165 {
-    /// @dev You must not set element 0xffffffff to true
+    /// @dev Every interface that we support
     mapping(bytes4 => bool) internal supportedInterfaces;
 
     function PublishInterfaces() internal {
         supportedInterfaces[0x01ffc9a7] = true; // ERC165
     }
 
+    /// @notice Query if a contract implements an interface
+    /// @param interfaceID The interface identifier, as specified in ERC-165
+    /// @dev Interface identification is specified in ERC-165. This function
+    ///  uses less than 30,000 gas.
+    /// @return `true` if the contract implements `interfaceID` and
+    ///  `interfaceID` is not 0xffffffff, `false` otherwise
     function supportsInterface(bytes4 interfaceID) external view returns (bool) {
-        return supportedInterfaces[interfaceID];
+        return supportedInterfaces[interfaceID] && (interfaceID != 0xffffffff);
     }
 }

@@ -1,4 +1,4 @@
-pragma solidity ^0.4.20;
+pragma solidity ^0.4.21;
 
 import "./SuNFT.sol";
 import "./AccessControl.sol";
@@ -7,7 +7,7 @@ import "./AccessControl.sol";
 /// @author William Entriken (https://phor.net)
 /// @dev See SuMain contract documentation for detail on how contracts interact.
 contract SuPromo is AccessControl, SuNFT {
-    uint256 public constant PROMO_CREATION_LIMIT = 5000;
+    uint256 constant PROMO_CREATION_LIMIT = 5000;
     uint256 public promoCreatedCount;
 
     /// @notice BEWARE, this does not use a safe transfer mechanism!

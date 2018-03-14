@@ -1,4 +1,4 @@
-pragma solidity ^0.4.20;
+pragma solidity ^0.4.21;
 
 import "./SuNFT.sol";
 
@@ -6,7 +6,7 @@ import "./SuNFT.sol";
 /// @author William Entriken (https://phor.net)
 /// @dev See SuMain contract documentation for detail on how contracts interact.
 contract SuOperation is SuNFT {
-
+    /// @dev The personalization of a square has changed
     event Personalized(uint256 _nftId);
 
     /// @dev The main SuSquare struct. The owner may set these properties, subject
@@ -48,7 +48,7 @@ contract SuOperation is SuNFT {
     ///  ordered like the squares are ordered. See Imagemagick's command
     ///  convert -size 10x10 -depth 8 in.rgb out.png
     /// @param _title A description of your square (max 64 bytes UTF-8)
-    /// @param _href A hyperlink for your square (max 100 bytes)
+    /// @param _href A hyperlink for your square (max 96 bytes)
     function personalizeSquare(
         uint256 _squareId,
         bytes _rgbData,
@@ -61,7 +61,7 @@ contract SuOperation is SuNFT {
         address owner = ownerOf(_squareId);
         require(msg.sender == owner);
         require(bytes(_title).length <= 64);
-        require(bytes(_href).length <= 100);
+        require(bytes(_href).length <= 96);
         require(_rgbData.length == 300);
         suSquares[_squareId].version++;
         suSquares[_squareId].rgbData = _rgbData;
@@ -70,47 +70,6 @@ contract SuOperation is SuNFT {
         if (suSquares[_squareId].version > 3) {
             require(msg.value == 100 finney);
         }
-
-        Personalized(_squareId);
+        emit Personalized(_squareId);
     }
-
-    /* Ignore this for now
-    function checkPng(bytes _pngData) public {
-        require(_pngData.length <= 400);
-        require(_pngData.length >= 67); // Smallest legal PNG file size
-        // Basic PNG validation, source: http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html
-        // "The first eight bytes of a PNG file always contain the following (decimal) values:"
-        require(_pngData[0] == 0x89); // 8-byte signature
-        require(_pngData[1] == "P");
-        require(_pngData[2] == "N");
-        require(_pngData[3] == "G");
-        require(_pngData[4] == 0x0d);
-        require(_pngData[5] == 0x0a);
-        require(_pngData[6] == 0x1a);
-        require(_pngData[7] == 0x0a);
-        // "The IHDR chunk must appear FIRST."
-        // - "Each chunk consists of four parts:"
-        // - "Length"
-        require(_pngData[8] == 0x00);
-        require(_pngData[9] == 0x00);
-        require(_pngData[10] == 0x00);
-        require(_pngData[11] == 0x0d);
-        // - "Chunk Type"
-        require(_pngData[12] == "I"); // IHDR chunk header
-        require(_pngData[13] == "H");
-        require(_pngData[14] == "D");
-        require(_pngData[15] == "R");
-        // - "Chunk Data"
-        // "The IHDR ... contains:"
-        require(_pngData[16] == 0x00); // IHDR width
-        require(_pngData[17] == 0x00);
-        require(_pngData[18] == 0x00);
-        require(_pngData[19] == 0x0a);
-        require(_pngData[20] == 0x00); // IHDR height
-        require(_pngData[21] == 0x00);
-        require(_pngData[22] == 0x00);
-        require(_pngData[23] == 0x0a);
-        // That's enough validation, I think
-    }
-    */
 }

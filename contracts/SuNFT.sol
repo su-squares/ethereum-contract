@@ -1,9 +1,9 @@
-pragma solidity ^0.4.20;
+pragma solidity ^0.4.21;
 
 import "./ERC721.sol";
 import "./PublishInterfaces.sol";
 
-/// @title Compliance with ERC-721 (draft) for Su Squares
+/// @title Compliance with ERC-721 for Su Squares
 /// @dev This implementation assumes:
 ///  - A fixed supply of NFTs, cannot mint or burn
 ///  - ids are numbered sequentially starting at 1.
@@ -11,8 +11,7 @@ import "./PublishInterfaces.sol";
 ///  - This contract does not externally call its own functions
 ///  - This contract does not receive NFTs
 /// @author William Entriken (https://phor.net)
-contract SuNFT is ERC721, ERC721Metadata, ERC721Enumerable, ERC165, PublishInterfaces {
-
+contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInterfaces {
     // COMPLIANCE WITH ERC721 //////////////////////////////////////////////////
 
     /// @dev This emits when ownership of any NFT changes by any mechanism.
@@ -79,7 +78,7 @@ contract SuNFT is ERC721, ERC721Metadata, ERC721Enumerable, ERC165, PublishInter
 
     /// @notice Transfers the ownership of an NFT from one address to another address
     /// @dev This works identically to the other function with an extra data parameter,
-    ///  except this function just sets data to []
+    ///  except this function just sets data to ""
     /// @param _from The current owner of the NFT
     /// @param _to The new owner
     /// @param _tokenId The NFT to transfer
@@ -132,7 +131,7 @@ contract SuNFT is ERC721, ERC721Metadata, ERC721Enumerable, ERC165, PublishInter
             _owner = address(this);
         }
         _approvedOfNFT[_tokenId] = _approved;
-        Approval(_owner, _approved, _tokenId);
+        emit Approval(_owner, _approved, _tokenId);
     }
 
     /// @notice Enable or disable approval for a third party ("operator") to manage
@@ -142,7 +141,7 @@ contract SuNFT is ERC721, ERC721Metadata, ERC721Enumerable, ERC165, PublishInter
     /// @param _approved True if the operators is approved, false to revoke approval
     function setApprovalForAll(address _operator, bool _approved) external {
         _operatorsOfAddress[msg.sender][_operator] = _approved;
-        ApprovalForAll(msg.sender, _operator, _approved);
+        emit ApprovalForAll(msg.sender, _operator, _approved);
     }
 
     /// @notice Get the approved address for a single NFT
@@ -237,8 +236,8 @@ contract SuNFT is ERC721, ERC721Metadata, ERC721Enumerable, ERC165, PublishInter
 
     // INTERNAL INTERFACE //////////////////////////////////////////////////////
 
-//TODO: consider making this throw if _nftId is an invalid NFT
     modifier mustBeOwnedByThisContract(uint256 _nftId) {
+        require(_nftId >= 1 && _nftId <= TOTAL_SUPPLY);
         address owner = _ownerOfNFTWithSubstitutions[_nftId];
         require(owner == address(0) || owner == address(this));
         _;
@@ -251,19 +250,12 @@ contract SuNFT is ERC721, ERC721Metadata, ERC721Enumerable, ERC165, PublishInter
         _;
     }
 
-//TODO: can save gas if you put a _from check here too...
     modifier canSend(uint256 _tokenId) {
         // assert(msg.sender != address(this))
         address owner = _ownerOfNFTWithSubstitutions[_tokenId];
         address approved = _approvedOfNFT[_tokenId];
         require(msg.sender == owner || msg.sender == approved ||
             _operatorsOfAddress[owner][msg.sender]);
-        _;
-    }
-
-    modifier allowedToSendNFT(uint256 _nftId, address _addr) {
-//TODO: IMPLEMEENT
-        //require(...)
         _;
     }
 
@@ -275,7 +267,7 @@ contract SuNFT is ERC721, ERC721Metadata, ERC721Enumerable, ERC165, PublishInter
     /// @dev Actually do a transfer, does NO precondition checking
     function _transfer(uint256 _nftId, address _to) internal {
         // Here are the preconditions we are not checking:
-        // assert(allowedToSendNFT(msg.sender, _nftId))
+        // assert(canSend(_nftId))
         // assert(mustBeValidNFT(_nftId))
         // assert(_to != address(0));
 
@@ -315,7 +307,7 @@ contract SuNFT is ERC721, ERC721Metadata, ERC721Enumerable, ERC165, PublishInter
 
         // External processing
         _ownerOfNFTWithSubstitutions[_nftId] = _to;
-        Transfer(from, _to, _nftId);
+        emit Transfer(from, _to, _nftId);
     }
     // PRIVATE STORAGE AND FUNCTIONS ///////////////////////////////////////////
 

@@ -1,22 +1,16 @@
-pragma solidity ^0.4.20;
+pragma solidity ^0.4.21;
 
-/// @title A reusable three-role access control mechanism
+/// @title Reusable three-role access control inspired by CryptoKitties
 /// @author William Entriken (https://phor.net)
+/// @dev Keep the CEO wallet stored offline, I warned you
 contract AccessControl {
-
-    // We separate duties into three roles. Inspired by CryptoKitties.
-    //
-    //   - Executive officer can reassign these three roles.
-    //
-    //   - Finance officer can withdraw funds from this contract.
-    //
-    //   - Operating officer can grant promo SuSquares and pre-sale SuSquares.
-    //
-    // This separation of duties means that the executive officer role is
-    // useless for day-to-day operations. That wallet should staff offline in a
-    // safe. That role becomes useful only if another account is compromised.
+    /// @notice The account that can only reassign executive accounts
     address public executiveOfficerAddress;
+
+    /// @notice The account that can collect funds from this contract
     address public financialOfficerAddress;
+
+    /// @notice The account with administrative control of this contract
     address public operatingOfficerAddress;
 
     function AccessControl() internal {
@@ -41,7 +35,7 @@ contract AccessControl {
         _;
     }
 
-    /// @dev Reassign the executive officer role
+    /// @notice Reassign the executive officer role
     /// @param _executiveOfficerAddress new officer address
     function setExecutiveOfficer(address _executiveOfficerAddress)
         external
@@ -51,7 +45,7 @@ contract AccessControl {
         executiveOfficerAddress = _executiveOfficerAddress;
     }
 
-    /// @dev Reassign the financial officer role
+    /// @notice Reassign the financial officer role
     /// @param _financialOfficerAddress new officer address
     function setFinancialOfficer(address _financialOfficerAddress)
         external
@@ -61,7 +55,7 @@ contract AccessControl {
         financialOfficerAddress = _financialOfficerAddress;
     }
 
-    /// @dev Reassign the operating officer role
+    /// @notice Reassign the operating officer role
     /// @param _operatingOfficerAddress new officer address
     function setOperatingOfficer(address _operatingOfficerAddress)
         external
@@ -71,8 +65,8 @@ contract AccessControl {
         operatingOfficerAddress = _operatingOfficerAddress;
     }
 
-    /// @dev Take payment of money in this contract
+    /// @notice Collect funds from this contract
     function withdrawBalance() external onlyFinancialOfficer {
-        financialOfficerAddress.transfer(this.balance);
+        financialOfficerAddress.transfer(address(this).balance);
     }
 }
