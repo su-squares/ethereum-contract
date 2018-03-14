@@ -9,10 +9,50 @@ import "./PublishInterfaces.sol";
 ///  - ids are numbered sequentially starting at 1.
 ///  - NFTs are initially assigned to this contract
 ///  - This contract does not externally call its own functions
-///  - This contract does not receive NFTs
 /// @author William Entriken (https://phor.net)
 contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInterfaces {
-    // COMPLIANCE WITH ERC721 //////////////////////////////////////////////////
+    /// @dev The authorized address for each NFT
+    mapping (uint256 => address) internal tokenApprovals;
+
+    /// @dev The authorized operators for each address
+    mapping (address => mapping (address => bool)) internal operatorApprovals;
+
+    /// @dev Guarantees msg.sender is the owner of _tokenId
+    /// @param _tokenId The token to validate belongs to msg.sender
+    modifier onlyOwnerOf(uint256 _tokenId) {
+        address owner = _tokenOwnerWithSubstitutions[_tokenId];
+        // assert(msg.sender != address(this))
+        require(msg.sender == owner);
+        _;
+    }
+
+    modifier mustBeOwnedByThisContract(uint256 _tokenId) {
+        require(_tokenId >= 1 && _tokenId <= TOTAL_SUPPLY);
+        address owner = _tokenOwnerWithSubstitutions[_tokenId];
+        require(owner == address(0) || owner == address(this));
+        _;
+    }
+
+    modifier canOperate(uint256 _tokenId) {
+        // assert(msg.sender != address(this))
+        address owner = _tokenOwnerWithSubstitutions[_tokenId];
+        require(msg.sender == owner || operatorApprovals[owner][msg.sender]);
+        _;
+    }
+
+    modifier canTransfer(uint256 _tokenId) {
+        // assert(msg.sender != address(this))
+        address owner = _tokenOwnerWithSubstitutions[_tokenId];
+        require(msg.sender == owner ||
+          msg.sender == tokenApprovals[_tokenId] ||
+          operatorApprovals[msg.sender][msg.sender]);
+        _;
+    }
+
+    modifier mustBeValidToken(uint256 _tokenId) {
+        require(_tokenId >= 1 && _tokenId <= TOTAL_SUPPLY);
+        _;
+    }
 
     /// @dev This emits when ownership of any NFT changes by any mechanism.
     ///  This event emits when NFTs are created (`from` == 0) and destroyed
@@ -38,7 +78,7 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
     /// @return The number of NFTs owned by `_owner`, possibly zero
     function balanceOf(address _owner) external view returns (uint256) {
         require(_owner != address(0));
-        return _nftsOfOwnerWithSubstitutions[_owner].length;
+        return _tokensOfOwnerWithSubstitutions[_owner].length;
     }
 
     /// @notice Find the owner of an NFT
@@ -47,12 +87,12 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
     ///  about them do throw.
     /// @return The address of the owner of the NFT
     function ownerOf(uint256 _tokenId)
-        public
+        external
         view
-        mustBeValidNFT(_tokenId)
+        mustBeValidToken(_tokenId)
         returns (address _owner)
     {
-        _owner = _ownerOfNFTWithSubstitutions[_tokenId];
+        _owner = _tokenOwnerWithSubstitutions[_tokenId];
         // Handle substitutions
         if (_owner == address(0)) {
             _owner = address(this);
@@ -100,10 +140,10 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
     function transferFrom(address _from, address _to, uint256 _tokenId)
         external
         payable
-        mustBeValidNFT(_tokenId)
-        canSend(_tokenId)
+        mustBeValidToken(_tokenId)
+        canTransfer(_tokenId)
     {
-        address owner = _ownerOfNFTWithSubstitutions[_tokenId];
+        address owner = _tokenOwnerWithSubstitutions[_tokenId];
         // Handle substitutions
         if (owner == address(0)) {
             owner = address(this);
@@ -122,15 +162,15 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
     function approve(address _approved, uint256 _tokenId)
         external
         payable
-        // assert(mustBeValidNFT(_tokenId))
+        // assert(mustBeValidToken(_tokenId))
         canOperate(_tokenId)
     {
-        address _owner = _ownerOfNFTWithSubstitutions[_tokenId];
+        address _owner = _tokenOwnerWithSubstitutions[_tokenId];
         // Handle substitutions
         if (_owner == address(0)) {
             _owner = address(this);
         }
-        _approvedOfNFT[_tokenId] = _approved;
+        tokenApprovals[_tokenId] = _approved;
         emit Approval(_owner, _approved, _tokenId);
     }
 
@@ -140,7 +180,7 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
     /// @param _operator Address to add to the set of authorized operators.
     /// @param _approved True if the operators is approved, false to revoke approval
     function setApprovalForAll(address _operator, bool _approved) external {
-        _operatorsOfAddress[msg.sender][_operator] = _approved;
+        operatorApprovals[msg.sender][_operator] = _approved;
         emit ApprovalForAll(msg.sender, _operator, _approved);
     }
 
@@ -151,10 +191,10 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
     function getApproved(uint256 _tokenId)
         external
         view
-        mustBeValidNFT(_tokenId)
+        mustBeValidToken(_tokenId)
         returns (address)
     {
-        return _approvedOfNFT[_tokenId];
+        return tokenApprovals[_tokenId];
     }
 
     /// @notice Query if an address is an authorized operator for another address
@@ -162,7 +202,7 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
     /// @param _operator The address that acts on behalf of the owner
     /// @return True if `_operator` is an approved operator for `_owner`, false otherwise
     function isApprovedForAll(address _owner, address _operator) external view returns (bool) {
-        return _operatorsOfAddress[_owner][_operator];
+        return operatorApprovals[_owner][_operator];
     }
 
     // COMPLIANCE WITH ERC721Metadata //////////////////////////////////////////
@@ -184,7 +224,7 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
     function tokenURI(uint256 _tokenId)
         external
         view
-        mustBeValidNFT(_tokenId)
+        mustBeValidToken(_tokenId)
         returns (string _tokenURI)
     {
         _tokenURI = "https://tenthousandsu.com/erc721/00000.json";
@@ -225,7 +265,8 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
     ///   (sort order not specified)
     function tokenOfOwnerByIndex(address _owner, uint256 _index) external view returns (uint256 _tokenId) {
         require(_owner != address(0));
-        _tokenId = _nftsOfOwnerWithSubstitutions[_owner][_index];
+        require(_index < _tokensOfOwnerWithSubstitutions[_owner].length);
+        _tokenId = _tokensOfOwnerWithSubstitutions[_owner][_index];
         // Handle substitutions
         if (_owner == address(this)) {
             if (_tokenId == 0) {
@@ -236,43 +277,15 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
 
     // INTERNAL INTERFACE //////////////////////////////////////////////////////
 
-    modifier mustBeOwnedByThisContract(uint256 _nftId) {
-        require(_nftId >= 1 && _nftId <= TOTAL_SUPPLY);
-        address owner = _ownerOfNFTWithSubstitutions[_nftId];
-        require(owner == address(0) || owner == address(this));
-        _;
-    }
-
-    modifier canOperate(uint256 _tokenId) {
-        // assert(msg.sender != address(this))
-        address owner = _ownerOfNFTWithSubstitutions[_tokenId];
-        require(msg.sender == owner || _operatorsOfAddress[owner][msg.sender]);
-        _;
-    }
-
-    modifier canSend(uint256 _tokenId) {
-        // assert(msg.sender != address(this))
-        address owner = _ownerOfNFTWithSubstitutions[_tokenId];
-        address approved = _approvedOfNFT[_tokenId];
-        require(msg.sender == owner || msg.sender == approved ||
-            _operatorsOfAddress[owner][msg.sender]);
-        _;
-    }
-
-    modifier mustBeValidNFT(uint256 _nftId) {
-        require(_nftId >= 1 && _nftId <= TOTAL_SUPPLY);
-        _;
-    }
-
     /// @dev Actually do a transfer, does NO precondition checking
-    function _transfer(uint256 _nftId, address _to) internal {
+    function _transfer(uint256 _tokenId, address _to) internal {
         // Here are the preconditions we are not checking:
-        // assert(canSend(_nftId))
-        // assert(mustBeValidNFT(_nftId))
-        // assert(_to != address(0));
+        // assert(canTransfer(_tokenId))
+        // assert(mustBeValidToken(_tokenId))
+        require(_to != address(0));
 
         // Find the FROM address
-        address fromWithSubstitution = _ownerOfNFTWithSubstitutions[_nftId];
+        address fromWithSubstitution = _tokenOwnerWithSubstitutions[_tokenId];
         address from = fromWithSubstitution;
         if (fromWithSubstitution == address(0)) {
             from = address(this);
@@ -280,53 +293,49 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
 
         // Take away from the FROM address
         // The Entriken algorithm for deleting from an indexed, unsorted array
-        uint256 indexToDeleteWithSubstitution = _indexOfNFTOfOwnerWithSubstitutions[_nftId];
+        uint256 indexToDeleteWithSubstitution = _ownedTokensIndexWithSubstitutions[_tokenId];
         uint256 indexToDelete;
         if (indexToDeleteWithSubstitution == 0) {
-            indexToDelete = _nftId - 1;
+            indexToDelete = _tokenId - 1;
         } else {
             indexToDelete = indexToDeleteWithSubstitution - 1;
         }
-        if (indexToDelete != _nftsOfOwnerWithSubstitutions[from].length - 1) {
-            uint256 lastNftWithSubstitution = _nftsOfOwnerWithSubstitutions[from][_nftsOfOwnerWithSubstitutions[from].length - 1];
+        if (indexToDelete != _tokensOfOwnerWithSubstitutions[from].length - 1) {
+            uint256 lastNftWithSubstitution = _tokensOfOwnerWithSubstitutions[from][_tokensOfOwnerWithSubstitutions[from].length - 1];
             uint256 lastNft = lastNftWithSubstitution;
             if (lastNftWithSubstitution == 0) {
                 // assert(from ==  address(0) || from == address(this));
-                lastNft = _nftsOfOwnerWithSubstitutions[from].length;
+                lastNft = _tokensOfOwnerWithSubstitutions[from].length;
             }
-            _nftsOfOwnerWithSubstitutions[from][indexToDelete] = lastNft;
-            _indexOfNFTOfOwnerWithSubstitutions[lastNft] = indexToDelete + 1;
+            _tokensOfOwnerWithSubstitutions[from][indexToDelete] = lastNft;
+            _ownedTokensIndexWithSubstitutions[lastNft] = indexToDelete + 1;
         }
-        delete _nftsOfOwnerWithSubstitutions[from][_nftsOfOwnerWithSubstitutions[from].length - 1]; // get gas back
-        _nftsOfOwnerWithSubstitutions[from].length--;
-        // Right now _indexOfNFTOfOwnerWithSubstitutions[_nftId] is invalid, set it below based on the new owner
+        delete _tokensOfOwnerWithSubstitutions[from][_tokensOfOwnerWithSubstitutions[from].length - 1]; // get gas back
+        _tokensOfOwnerWithSubstitutions[from].length--;
+        // Right now _ownedTokensIndexWithSubstitutions[_tokenId] is invalid, set it below based on the new owner
 
         // Give to the TO address
-        _nftsOfOwnerWithSubstitutions[_to].push(_nftId);
-        _indexOfNFTOfOwnerWithSubstitutions[_nftId] = (_nftsOfOwnerWithSubstitutions[_to].length - 1) + 1;
+        _tokensOfOwnerWithSubstitutions[_to].push(_tokenId);
+        _ownedTokensIndexWithSubstitutions[_tokenId] = (_tokensOfOwnerWithSubstitutions[_to].length - 1) + 1;
 
         // External processing
-        _ownerOfNFTWithSubstitutions[_nftId] = _to;
-        emit Transfer(from, _to, _nftId);
+        _tokenOwnerWithSubstitutions[_tokenId] = _to;
+        tokenApprovals[_tokenId] = address(0);
+        emit Transfer(from, _to, _tokenId);
     }
+
     // PRIVATE STORAGE AND FUNCTIONS ///////////////////////////////////////////
 
     uint256 private constant TOTAL_SUPPLY = 10000; // SOLIDITY ISSUE #3356 make this immutable
 
-    bytes4 private constant MAGIC_ONERC721RECEIVED = bytes4(keccak256("onERC721Received(address,uint256,bytes)"));
+    bytes4 private constant ERC721_RECEIVED = bytes4(keccak256("onERC721Received(address,uint256,bytes)"));
 
     /// @dev The owner of each NFT
     ///  If value == address(0), NFT is owned by address(this)
     ///  If value != address(0), NFT is owned by value
     ///  assert(This contract never assigns awnerhip to address(0) or destroys NFTs)
     ///  See commented out code in constructor, saves hella gas
-    mapping (uint256 => address) private _ownerOfNFTWithSubstitutions;
-
-    /// @dev The authorized address for each NFT
-    mapping (uint256 => address) private _approvedOfNFT;
-
-    /// @dev The authorized operators for each address
-    mapping (address => mapping (address => bool)) private _operatorsOfAddress;
+    mapping (uint256 => address) private _tokenOwnerWithSubstitutions;
 
     /// @dev The list of NFTs owned by each address
     ///  Nomenclature: this[key][index] = value
@@ -334,15 +343,15 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
     ///  If key == address(this) and value == 0, then index + 1 is the NFT
     ///  assert(0 is not a valid NFT)
     ///  See commented out code in constructor, saves hella gas
-    mapping (address => uint256[]) private _nftsOfOwnerWithSubstitutions;
+    mapping (address => uint256[]) private _tokensOfOwnerWithSubstitutions;
 
     /// @dev (Location + 1) of each NFT in its owner's list
     ///  Nomenclature: this[key] = value
-    ///  If value != 0, _nftsOfOwnerWithSubstitutions[owner][value - 1] = nftId
-    ///  If value == 0, _nftsOfOwnerWithSubstitutions[owner][key - 1] = nftId
+    ///  If value != 0, _tokensOfOwnerWithSubstitutions[owner][value - 1] = nftId
+    ///  If value == 0, _tokensOfOwnerWithSubstitutions[owner][key - 1] = nftId
     ///  assert(2**256-1 is not a valid NFT)
     ///  See commented out code in constructor, saves hella gas
-    mapping (uint256 => uint256) private _indexOfNFTOfOwnerWithSubstitutions;
+    mapping (uint256 => uint256) private _ownedTokensIndexWithSubstitutions;
 
     // Due to implementation choices (no mint, no burn, contiguous NFT ids), it
     // is not necessary to keep an array of NFT ids nor where each NFT id is
@@ -360,27 +369,27 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
         // ..., address(this) for a total of TOTAL_SUPPLY times unnecessary at
         // deployment time
         // for (uint256 i = 1; i <= TOTAL_SUPPLY; i++) {
-        //     _ownerOfNFTWithSubstitutions[i] = address(this);
+        //     _tokenOwnerWithSubstitutions[i] = address(this);
         // }
 
         // The effect of substitution makes storing 1, 2, ..., TOTAL_SUPPLY
         // unnecessary at deployment time
-        _nftsOfOwnerWithSubstitutions[address(this)].length = TOTAL_SUPPLY;
+        _tokensOfOwnerWithSubstitutions[address(this)].length = TOTAL_SUPPLY;
         // for (uint256 i = 0; i < TOTAL_SUPPLY; i++) {
-        //     _nftsOfOwnerWithSubstitutions[address(this)][i] = i + 1;
+        //     _tokensOfOwnerWithSubstitutions[address(this)][i] = i + 1;
         // }
         // for (uint256 i = 1; i <= TOTAL_SUPPLY; i++) {
-        //     _indexOfNFTOfOwnerWithSubstitutions[i] = i - 1;
+        //     _ownedTokensIndexWithSubstitutions[i] = i - 1;
         // }
     }
 
     /// @dev Actually perform the safeTransferFrom
     function _safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes data)
         private
-        mustBeValidNFT(_tokenId)
-        canSend(_tokenId)
+        mustBeValidToken(_tokenId)
+        canTransfer(_tokenId)
     {
-        address owner = _ownerOfNFTWithSubstitutions[_tokenId];
+        address owner = _tokenOwnerWithSubstitutions[_tokenId];
         // Handle substitutions
         if (owner == address(0)) {
             owner = address(this);
@@ -396,6 +405,6 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
             return;
         }
         bytes4 retval = ERC721TokenReceiver(_to).onERC721Received(_from, _tokenId, data);
-        require(retval == MAGIC_ONERC721RECEIVED);
+        require(retval == ERC721_RECEIVED);
     }
 }
