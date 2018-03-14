@@ -16,7 +16,7 @@ contract SuVending is SuNFT {
     function purchase(uint256 _nftId)
         external
         payable
-        mustBeValidNFT(_nftId)
+        mustBeValidToken(_nftId)
         mustBeOwnedByThisContract(_nftId)
     {
         require(msg.value == SALE_PRICE);

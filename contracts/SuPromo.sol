@@ -15,7 +15,7 @@ contract SuPromo is AccessControl, SuNFT {
     function grantToken(uint256 _tokenId, address _newOwner)
         external
         onlyOperatingOfficer
-        mustBeValidNFT(_tokenId)
+        mustBeValidToken(_tokenId)
         mustBeOwnedByThisContract(_tokenId)
     {
         require(promoCreatedCount < PROMO_CREATION_LIMIT);
