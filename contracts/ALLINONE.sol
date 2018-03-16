@@ -1,4 +1,4 @@
-pragma solidity ^0.4.20;
+pragma solidity ^0.4.21;
 
 /******************************************************************************\
 *..................................SU.SQUARES..................................*
@@ -652,6 +652,8 @@ contract SuOperation is SuNFT {
 /// @dev See SuMain contract documentation for detail on how contracts interact.
 contract SuPromo is AccessControl, SuNFT {
     uint256 constant PROMO_CREATION_LIMIT = 5000;
+
+    /// @notice How many promo squares were granted
     uint256 public promoCreatedCount;
 
     /// @notice BEWARE, this does not use a safe transfer mechanism!
@@ -676,7 +678,7 @@ contract SuPromo is AccessControl, SuNFT {
 contract SuVending is SuNFT {
     uint256 constant SALE_PRICE = 500 finney; // 0.5 ether
 
-    /// @notice The price is always 0.5 ether, and you can buy any available Square
+    /// @notice The price is always 0.5 ether, and you can buy any available square
     ///  Be sure you are calling this from a regular account (not a smart contract)
     ///  or if you are calling from a smart contract, make sure it can use
     ///  ERC-721 non-fungible tokens

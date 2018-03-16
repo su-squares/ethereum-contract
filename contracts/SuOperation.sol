@@ -56,10 +56,9 @@ contract SuOperation is SuNFT {
         string _href
     )
         external
+        onlyOwnerOf(_squareId)
         payable
     {
-        address owner = ownerOf(_squareId);
-        require(msg.sender == owner);
         require(bytes(_title).length <= 64);
         require(bytes(_href).length <= 96);
         require(_rgbData.length == 300);

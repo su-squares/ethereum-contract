@@ -9,7 +9,7 @@ import "./SuNFT.sol";
 contract SuVending is SuNFT {
     uint256 constant SALE_PRICE = 500 finney; // 0.5 ether
 
-    /// @notice The price is always 0.5 ether, and you can buy any available square.
+    /// @notice The price is always 0.5 ether, and you can buy any available square
     ///  Be sure you are calling this from a regular account (not a smart contract)
     ///  or if you are calling from a smart contract, make sure it can use
     ///  ERC-721 non-fungible tokens

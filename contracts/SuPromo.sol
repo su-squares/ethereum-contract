@@ -8,6 +8,8 @@ import "./AccessControl.sol";
 /// @dev See SuMain contract documentation for detail on how contracts interact.
 contract SuPromo is AccessControl, SuNFT {
     uint256 constant PROMO_CREATION_LIMIT = 5000;
+
+    /// @notice How many promo squares were granted
     uint256 public promoCreatedCount;
 
     /// @notice BEWARE, this does not use a safe transfer mechanism!
