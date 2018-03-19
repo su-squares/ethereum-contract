@@ -613,7 +613,7 @@ contract SuOperation is SuNFT {
     SuSquare[10001] public suSquares;
 
     /// @notice Update the contents of your square, the first 3 personalizations
-    ///  for a square are free then cost 100 finney (0.1 ether) each
+    ///  for a square are free then cost 10 finney (0.01 ether) each
     /// @param _squareId The top-left is 1, to its right is 2, ..., top-right is
     ///  100 and then 101 is below 1... the last one at bottom-right is 10000
     /// @param _squareId A 10x10 image for your square, in 8-bit RGB words
@@ -639,7 +639,7 @@ contract SuOperation is SuNFT {
         suSquares[_squareId].title = _title;
         suSquares[_squareId].href = _href;
         if (suSquares[_squareId].version > 3) {
-            require(msg.value == 100 finney);
+            require(msg.value == 10 finney);
         }
         emit Personalized(_squareId);
     }
