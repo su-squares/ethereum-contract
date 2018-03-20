@@ -245,9 +245,9 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
     }
 
     /// @notice Find the owner of an NFT
-    /// @param _tokenId The identifier for an NFT
     /// @dev NFTs assigned to zero address are considered invalid, and queries
     ///  about them do throw.
+    /// @param _tokenId The identifier for an NFT
     /// @return The address of the owner of the NFT
     function ownerOf(uint256 _tokenId)
         external
@@ -524,9 +524,10 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
 
     function SuNFT() internal {
         // Publish interfaces with ERC-165
-        supportedInterfaces[0x6466353c] = true; // ERC721
+        supportedInterfaces[0x80ac58cd] = true; // ERC721
         supportedInterfaces[0x5b5e139f] = true; // ERC721Metadata
         supportedInterfaces[0x780e9d63] = true; // ERC721Enumerable
+        supportedInterfaces[0x8153916a] = true; // ERC721 + 165 (not needed)
 
         // The effect of substitution makes storing address(this), address(this)
         // ..., address(this) for a total of TOTAL_SUPPLY times unnecessary at
