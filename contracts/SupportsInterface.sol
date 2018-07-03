@@ -1,14 +1,14 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.24;
 
 import "./ERC165.sol";
 
 /// @title A reusable contract to comply with ERC-165
 /// @author William Entriken (https://phor.net)
-contract PublishInterfaces is ERC165 {
-    /// @dev Every interface that we support
+contract SupportsInterface is ERC165 {
+    /// @dev Every interface that we support, do not set 0xffffffff to true
     mapping(bytes4 => bool) internal supportedInterfaces;
 
-    function PublishInterfaces() internal {
+    constructor() internal {
         supportedInterfaces[0x01ffc9a7] = true; // ERC165
     }
 

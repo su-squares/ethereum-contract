@@ -1,12 +1,12 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.24;
 
 import "./ERC165.sol";
 
 /// @title ERC-721 Non-Fungible Token Standard
-/// @dev See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md
-contract ERC721 is ERC165 {
-    event Transfer(address indexed _from, address indexed _to, uint256 _tokenId);
-    event Approval(address indexed _owner, address indexed _approved, uint256 _tokenId);
+/// @dev Reference https://eips.ethereum.org/EIPS/eip-721
+interface ERC721 /* is ERC165 */ {
+    event Transfer(address indexed _from, address indexed _to, uint256 indexed _tokenId);
+    event Approval(address indexed _owner, address indexed _approved, uint256 indexed _tokenId);
     event ApprovalForAll(address indexed _owner, address indexed _operator, bool _approved);
     function balanceOf(address _owner) external view returns (uint256);
     function ownerOf(uint256 _tokenId) external view returns (address);
@@ -21,7 +21,7 @@ contract ERC721 is ERC165 {
 
 /// @title ERC-721 Non-Fungible Token Standard
 interface ERC721TokenReceiver {
-	function onERC721Received(address _from, uint256 _tokenId, bytes data) external returns(bytes4);
+    function onERC721Received(address _operator, address _from, uint256 _tokenId, bytes _data) external returns(bytes4);
 }
 
 /// @title ERC-721 Non-Fungible Token Standard, optional metadata extension

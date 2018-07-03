@@ -1,7 +1,7 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.24;
 
 import "./ERC721.sol";
-import "./PublishInterfaces.sol";
+import "./SupportsInterface.sol";
 
 /// @title Compliance with ERC-721 for Su Squares
 /// @dev This implementation assumes:
@@ -10,7 +10,7 @@ import "./PublishInterfaces.sol";
 ///  - NFTs are initially assigned to this contract
 ///  - This contract does not externally call its own functions
 /// @author William Entriken (https://phor.net)
-contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInterfaces {
+contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, SupportsInterface {
     /// @dev The authorized address for each NFT
     mapping (uint256 => address) internal tokenApprovals;
 
@@ -59,13 +59,13 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
     ///  (`to` == 0). Exception: during contract creation, any number of NFTs
     ///  may be created and assigned without emitting Transfer. At the time of
     ///  any transfer, the approved address for that NFT (if any) is reset to none.
-    event Transfer(address indexed _from, address indexed _to, uint256 _tokenId);
+    event Transfer(address indexed _from, address indexed _to, uint256 indexed _tokenId);
 
     /// @dev This emits when the approved address for an NFT is changed or
     ///  reaffirmed. The zero address indicates there is no approved address.
     ///  When a Transfer event emits, this also indicates that the approved
     ///  address for that NFT (if any) is reset to none.
-    event Approval(address indexed _owner, address indexed _approved, uint256 _tokenId);
+    event Approval(address indexed _owner, address indexed _approved, uint256 indexed _tokenId);
 
     /// @dev This emits when an operator is enabled or disabled for an owner.
     ///  The operator can manage all NFTs of the owner.
@@ -106,7 +106,7 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
     ///  `_tokenId` is not a valid NFT. When transfer is complete, this function
     ///  checks if `_to` is a smart contract (code size > 0). If so, it calls
     ///  `onERC721Received` on `_to` and throws if the return value is not
-    ///  `bytes4(keccak256("onERC721Received(address,uint256,bytes)"))`.
+    ///  `bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"))`.
     /// @param _from The current owner of the NFT
     /// @param _to The new owner
     /// @param _tokenId The NFT to transfer
@@ -118,7 +118,7 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
 
     /// @notice Transfers the ownership of an NFT from one address to another address
     /// @dev This works identically to the other function with an extra data parameter,
-    ///  except this function just sets data to ""
+    ///  except this function just sets data to "".
     /// @param _from The current owner of the NFT
     /// @param _to The new owner
     /// @param _tokenId The NFT to transfer
@@ -153,9 +153,9 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
         _transfer(_tokenId, _to);
     }
 
-    /// @notice Set or reaffirm the approved address for an NFT
+    /// @notice Change or reaffirm the approved address for an NFT
     /// @dev The zero address indicates there is no approved address.
-    /// @dev Throws unless `msg.sender` is the current NFT owner, or an authorized
+    ///  Throws unless `msg.sender` is the current NFT owner, or an authorized
     ///  operator of the current owner.
     /// @param _approved The new approved NFT controller
     /// @param _tokenId The NFT to approve
@@ -174,18 +174,19 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
         emit Approval(_owner, _approved, _tokenId);
     }
 
-    /// @notice Enable or disable approval for a third party ("operator") to manage
-    ///  all your asset.
-    /// @dev Emits the ApprovalForAll event
-    /// @param _operator Address to add to the set of authorized operators.
-    /// @param _approved True if the operators is approved, false to revoke approval
+    /// @notice Enable or disable approval for a third party ("operator") to
+    ///  manage all of `msg.sender`'s assets
+    /// @dev Emits the ApprovalForAll event. The contract MUST allow
+    ///  multiple operators per owner.
+    /// @param _operator Address to add to the set of authorized operators
+    /// @param _approved True if operator is approved, false to revoke approval
     function setApprovalForAll(address _operator, bool _approved) external {
         operatorApprovals[msg.sender][_operator] = _approved;
         emit ApprovalForAll(msg.sender, _operator, _approved);
     }
 
     /// @notice Get the approved address for a single NFT
-    /// @dev Throws if `_tokenId` is not a valid NFT
+    /// @dev Throws if `_tokenId` is not a valid NFT.
     /// @param _tokenId The NFT to find the approved address for
     /// @return The approved address for this NFT, or the zero address if there is none
     function getApproved(uint256 _tokenId)
@@ -240,8 +241,8 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
     // COMPLIANCE WITH ERC721Enumerable ////////////////////////////////////////
 
     /// @notice Count NFTs tracked by this contract
-    /// @return A count of valid NFTs tracked by this contract, where each one of
-    ///  them has an assigned and queryable owner not equal to the zero address
+    /// @return A count of valid NFTs tracked by this contract, where each one
+    ///  has an assigned and queryable owner not equal to the zero address
     function totalSupply() external view returns (uint256) {
         return TOTAL_SUPPLY;
     }
@@ -326,9 +327,10 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
 
     // PRIVATE STORAGE AND FUNCTIONS ///////////////////////////////////////////
 
-    uint256 private constant TOTAL_SUPPLY = 10000; // SOLIDITY ISSUE #3356 make this immutable
+    // See Solidity issue #3356, it would be clearer to initialize in SuMain
+    uint256 private constant TOTAL_SUPPLY = 10000;
 
-    bytes4 private constant ERC721_RECEIVED = bytes4(keccak256("onERC721Received(address,uint256,bytes)"));
+    bytes4 private constant ERC721_RECEIVED = bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"));
 
     /// @dev The owner of each NFT
     ///  If value == address(0), NFT is owned by address(this)
@@ -359,7 +361,7 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
     // address[] private nftIds;
     // mapping (uint256 => uint256) private nftIndexOfId;
 
-    function SuNFT() internal {
+    constructor() internal {
         // Publish interfaces with ERC-165
         supportedInterfaces[0x80ac58cd] = true; // ERC721
         supportedInterfaces[0x5b5e139f] = true; // ERC721Metadata
@@ -405,7 +407,7 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, PublishInter
         if (codeSize == 0) {
             return;
         }
-        bytes4 retval = ERC721TokenReceiver(_to).onERC721Received(_from, _tokenId, data);
+        bytes4 retval = ERC721TokenReceiver(_to).onERC721Received(msg.sender, _from, _tokenId, data);
         require(retval == ERC721_RECEIVED);
     }
 }

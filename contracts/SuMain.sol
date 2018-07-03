@@ -1,4 +1,4 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.24;
 
 import "./AccessControl.sol";
 import "./SuNFT.sol";
@@ -10,7 +10,6 @@ import "./SuVending.sol";
 /// @author William Entriken (https://phor.net)
 /// @dev See SuMain contract documentation for detail on how contracts interact.
 contract SuMain is AccessControl, SuNFT, SuOperation, SuVending, SuPromo {
-    function SuMain() public {
+    constructor() public {
     }
 }
- 

@@ -1,8 +1,8 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.24;
 
 /// @title Reusable three-role access control inspired by CryptoKitties
 /// @author William Entriken (https://phor.net)
-/// @dev Keep the CEO wallet stored offline, I warned you
+/// @dev Keep the CEO wallet stored offline, I warned you.
 contract AccessControl {
     /// @notice The account that can only reassign executive accounts
     address public executiveOfficerAddress;
@@ -13,7 +13,7 @@ contract AccessControl {
     /// @notice The account with administrative control of this contract
     address public operatingOfficerAddress;
 
-    function AccessControl() internal {
+    constructor() internal {
         executiveOfficerAddress = msg.sender;
     }
 

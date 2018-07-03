@@ -1,4 +1,4 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.24;
 
 import "./SuNFT.sol";
 
@@ -9,7 +9,7 @@ contract SuOperation is SuNFT {
     /// @dev The personalization of a square has changed
     event Personalized(uint256 _nftId);
 
-    /// @dev The main SuSquare struct. The owner may set these properties, subject
+    /// @dev The main SuSquare struct. The owner may set these properties,
     ///  subject to certain rules. The actual 10x10 image is rendered on our
     ///  website using this data.
     struct SuSquare {

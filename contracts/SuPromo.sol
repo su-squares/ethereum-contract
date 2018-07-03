@@ -1,9 +1,9 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.24;
 
 import "./SuNFT.sol";
 import "./AccessControl.sol";
 
-/// @title A limited pre-sale and promotional giveaway.
+/// @title A limited pre-sale and promotional giveaway
 /// @author William Entriken (https://phor.net)
 /// @dev See SuMain contract documentation for detail on how contracts interact.
 contract SuPromo is AccessControl, SuNFT {
