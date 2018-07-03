@@ -4,7 +4,6 @@ import "./SuNFT.sol";
 
 /// @title The features that square owners can use
 /// @author William Entriken (https://phor.net)
-/// @dev See SuMain contract documentation for detail on how contracts interact.
 contract SuOperation is SuNFT {
     /// @dev The personalization of a square has changed
     event Personalized(uint256 _nftId);

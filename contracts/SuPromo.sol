@@ -5,7 +5,6 @@ import "./AccessControl.sol";
 
 /// @title A limited pre-sale and promotional giveaway
 /// @author William Entriken (https://phor.net)
-/// @dev See SuMain contract documentation for detail on how contracts interact.
 contract SuPromo is AccessControl, SuNFT {
     uint256 constant PROMO_CREATION_LIMIT = 5000;
 

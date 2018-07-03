@@ -5,7 +5,6 @@ import "./SuNFT.sol";
 
 /// @title A token vending machine
 /// @author William Entriken (https://phor.net)
-/// @dev See SuMain contract documentation for detail on how contracts interact.
 contract SuVending is SuNFT {
     uint256 constant SALE_PRICE = 500 finney; // 0.5 ether
 
