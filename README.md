@@ -1,15 +1,24 @@
-# Su Squares Bounty Program IS NOW CLOSED
+# Su Squares Bounty Program ROUND 2
 
-Thank you to everyone for participating!
+**:sunny: START DATE 2018-07-02 / END DATE 2018-07-07 :crescent_moon:**
+
+Thank you to everyone for participating in round one.
+
+Now that ERC-721 is final status, we are starting a second bounty.
 
 **Leaderboard & rewards:**
 
-| Issue                     | Researcher | Reward            |
-| ------------------------- | ---------- | ----------------- |
-| #2 Incorrect price        | @sz-piotr  | 1 square          |
-| #1 Incorrect comment `[]` | @sz-piotr  | 1 square          |
+| Issue                     | Researcher   | Reward            |
+| ------------------------- | ------------ | ----------------- |
+| #3 Clear approval         | @paulbarclay | 1 square          |
+| #2 Incorrect price        | @sz-piotr    | 1 square          |
+| #1 Incorrect comment `[]` | @sz-piotr    | 1 square          |
 
 ---
+
+**Sponsor this bug bounty if you support ERC-721**. We list you here even if you don't pay out any money. Call us at Su@TenThousandSu.com.
+
+**Feature this bug bounty on your news website, earn a link here.**
 
 **Now featured on GitCoin, you can check them out here https://twitter.com/GetGitcoin**
 
@@ -19,7 +28,7 @@ Su Squares Bounty Program recognizes necessity of security researchers to keep o
 
 Su Squares are collectable property which you can personalize and show off! Your ownership of this property can't be taken away from you.
 
-Su Squares is the first public implementation of the new EIP-ready [ERC-721](https://github.com/ethereum/eips/issues/721) standard for non-fungible tokens (deeds). This bounty greatly contributes to the ERC-721 standardization process.
+Su Squares is the first public implementation of the new final [ERC-721](https://github.com/ethereum/eips/issues/721) standard for non-fungible tokens (deeds).
 
 You can personalize your Su Square by adding an image, text and a hyperlink to your website
 
@@ -37,7 +46,7 @@ This bounty program will run within the Ropsten network from **2018-03-01 at 00:
 
 - Any undocumented and unintuitive behavior
 
-**The contract is deployed on Ropsten network at [0x7bc6cfb376e2d607c0f0d608a3823ab3826173f6](https://ropsten.etherscan.io/address/0x7bc6cfb376e2d607c0f0d608a3823ab3826173f6).**
+**The bounty V2 contract is deployed on Ropsten network at [0xa900551bc6208286bb0fcdd1383ee648159b44f9](https://ropsten.etherscan.io/address/0xa900551bc6208286bb0fcdd1383ee648159b44f9)**
 
 ## Rules and rewards
 
@@ -86,13 +95,13 @@ Rules for bounty sponsor:
 ## More questions
 
 * Can I use this code in my project?
-  * No. This code is provided to you solely for this security research program, please do not use it for other purposes. We plan to release some of this code to OpenZeppelin after the program is over.
+  * No. This code is provided to you solely for this security research program, please do not use it for other purposes.
 * Will things change during the bounty program?
   * Yes, we are seeking sponsors and will add additional prizes here if that happens.
   * Yes, we will update the code and redeploy the contract. So, click STAR and WATCH above on this repo for updates.
 * Taxes?
   * If sponsors give us so much money that you will need to fill out a tax form, then we will ask you to fill out a tax form. This whole program is subject to the laws of Pennsylvania.
-* I read to the bottom of the file. That's not even a question.
-  * Good, you're the type of person we're seeking. Here's a hint, you can see the [CryptoKitties bounty program](https://github.com/axiomzen/cryptokitties-bounty) and everything that happened there. We stole lots of ideas from them, thank you. And see also [the Su Squares Gitter](https://gitter.im/Su-Squares/Lobby#).
+* I read to the bottom of the file.
+  *  That's not even a question. Good, you're the type of person we're seeking. Here's a hint, you can see the [CryptoKitties bounty program](https://github.com/axiomzen/cryptokitties-bounty) and everything that happened there. We stole lots of ideas from them, thank you. And see also [the Su Squares Gitter](https://gitter.im/Su-Squares/Lobby#).
 
 Copyright 2018 William & Su Entriken. All rights reserved.
