@@ -1,6 +1,6 @@
-# Su Squares Bounty Program ROUND 2
+# Su Squares Ethereum Contract
 
-**:sunny: START DATE 2018-07-02 / END DATE 2018-07-07 :crescent_moon:**
+**:sunny: BOUNTY ROUND 2 START DATE 2018-07-02 / END DATE 2018-07-07 :crescent_moon:**
 
 Thank you to everyone for participating in round one.
 
