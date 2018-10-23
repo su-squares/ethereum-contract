@@ -208,7 +208,7 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, SupportsInte
         address owner = _tokenOwnerWithSubstitutions[_tokenId];
         require(msg.sender == owner ||
           msg.sender == tokenApprovals[_tokenId] ||
-          operatorApprovals[msg.sender][msg.sender]);
+          operatorApprovals[owner][msg.sender]);
         _;
     }
 
