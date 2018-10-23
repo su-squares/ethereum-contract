@@ -6,7 +6,7 @@ import "./SuOperation.sol";
 import "./SuPromo.sol";
 import "./SuVending.sol";
 
-/// @title The features that deed owners can use
+/// @title The features that deed owners can NOT use
 /// @author William Entriken (https://phor.net)
 contract SuMain is AccessControl, SuNFT, SuOperation, SuVending, SuPromo {
     constructor() public {
