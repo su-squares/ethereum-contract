@@ -2,7 +2,7 @@ pragma solidity ^0.4.24;
 
 /******************************************************************************\
 *..................................SU SQUARES..................................*
-*.......................Blockchain rentable advertising........................*
+*.....................Cute squares you own and personalize.....................*
 *..............................................................................*
 * First, I just want to say we are so excited and humbled to get this far and  *
 * that you're even reading this. So thank you!                                 *
