@@ -335,7 +335,7 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, SupportsInte
     /// @dev The owner of each NFT
     ///  If value == address(0), NFT is owned by address(this)
     ///  If value != address(0), NFT is owned by value
-    ///  assert(This contract never assigns awnerhip to address(0) or destroys NFTs)
+    ///  assert(This contract never assigns ownerhip to address(0) or destroys NFTs)
     ///  See commented out code in constructor, saves hella gas
     mapping (uint256 => address) private _tokenOwnerWithSubstitutions;
 
