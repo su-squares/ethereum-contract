@@ -40,7 +40,7 @@ contract SuOperation is SuNFT {
     SuSquare[10001] public suSquares;
 
     /// @notice Update the contents of your square, the first 3 personalizations
-    ///  for a square are free then cost 100 finney (0.01 ether) each
+    ///  for a square are free then cost 10 Finney (0.01 Ether) each
     /// @param _squareId The top-left is 1, to its right is 2, ..., top-right is
     ///  100 and then 101 is below 1... the last one at bottom-right is 10000
     /// @param _squareId A 10x10 image for your square, in 8-bit RGB words
