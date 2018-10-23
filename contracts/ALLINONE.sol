@@ -498,7 +498,7 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, SupportsInte
     /// @dev The owner of each NFT
     ///  If value == address(0), NFT is owned by address(this)
     ///  If value != address(0), NFT is owned by value
-    ///  assert(This contract never assigns ownerhip to address(0) or destroys NFTs)
+    ///  assert(This contract never assigns ownership to address(0) or destroys NFTs)
     ///  See commented out code in constructor, saves hella gas
     mapping (uint256 => address) private _tokenOwnerWithSubstitutions;
 
@@ -615,7 +615,7 @@ contract SuOperation is SuNFT {
     SuSquare[10001] public suSquares;
 
     /// @notice Update the contents of your square, the first 3 personalizations
-    ///  for a square are free then cost 100 finney (0.01 ether) each
+    ///  for a square are free then cost 10 Finney (0.01 Ether) each
     /// @param _squareId The top-left is 1, to its right is 2, ..., top-right is
     ///  100 and then 101 is below 1... the last one at bottom-right is 10000
     /// @param _squareId A 10x10 image for your square, in 8-bit RGB words
@@ -676,9 +676,9 @@ contract SuPromo is AccessControl, SuNFT {
 /// @title A token vending machine
 /// @author William Entriken (https://phor.net)
 contract SuVending is SuNFT {
-    uint256 constant SALE_PRICE = 500 finney; // 0.5 ether
+    uint256 constant SALE_PRICE = 500 finney; // 0.5 Ether
 
-    /// @notice The price is always 0.5 ether, and you can buy any available square
+    /// @notice The price is always 0.5 Ether, and you can buy any available square
     ///  Be sure you are calling this from a regular account (not a smart contract)
     ///  or if you are calling from a smart contract, make sure it can use
     ///  ERC-721 non-fungible tokens
