@@ -1,0 +1,9 @@
+{
+  "dependencies": {},
+  "devDependencies": {
+    "remix-tests": "*"
+  },
+  "scripts": {
+    "test": "mkdir -p build-test; cp contracts/* tests/* build-test; perl -pi -e 's|../contracts/||' build-test/*; remix-tests build-test"
+  }
+}
