@@ -1,3 +1,4 @@
 script:
   - sh tests/confirm-sol-merged.sh
+  - npm install
   - npm test
