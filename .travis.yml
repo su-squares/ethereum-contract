@@ -1,5 +1,5 @@
 language: node_js
-before_script:
+before_install:
   - npm i -g npm@6.4.1
 install:
   - npm install # do not use default npm ci
