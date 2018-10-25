@@ -1,1 +1,3 @@
-script: sh tests/confirm-sol-merged.sh
+script:
+  - sh tests/confirm-sol-merged.sh
+  - npm test
