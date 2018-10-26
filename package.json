@@ -1,9 +1,8 @@
 {
-  "dependencies": {},
-  "devDependencies": {
-    "remix-tests": "*"
-  },
   "scripts": {
-    "test": "mkdir -p build-test; cp contracts/* tests/* build-test; perl -pi -e 's|../contracts/||' build-test/*; remix-tests build-test"
+    "test": "sh test/confirm-sol-merged.sh && truffle test"
+  },
+  "devDependencies": {
+    "truffle": "^4.1.14"
   }
 }
