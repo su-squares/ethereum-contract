@@ -2,7 +2,7 @@ pragma solidity ^0.4.24;
 import "truffle/Assert.sol";
 import "./AccessControlStub.sol";
 
-contract TestAccessControl {
+contract AccessControlTest {
     AccessControlStub subject;
 
     function beforeEach() public {
