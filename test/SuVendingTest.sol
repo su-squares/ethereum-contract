@@ -2,8 +2,6 @@ pragma solidity ^0.4.24;
 import "truffle/Assert.sol";
 import "./mocks/SuVendingTestMock.sol";
 import "./helpers/CallProxy.sol";
-import "./helpers/ThrowProxy.sol";
-import "./helpers/KamikazeAirDrop.sol";
 
 contract SuVendingTest {
     // https://www.truffleframework.com/docs/truffle/testing/writing-tests-in-solidity#testing-ether-transactions
@@ -11,14 +9,10 @@ contract SuVendingTest {
 
     SuVendingTestMock subject;
     CallProxy subjectCallProxy;
-    ThrowProxy subjectThrowProxy;
 
-    event Log(uint256 amt);
     function beforeEach() public {
         subject = new SuVendingTestMock();
         subjectCallProxy = new CallProxy(subject);
-        subjectThrowProxy = new ThrowProxy(subject);
-        emit Log(address(this).balance);
     }
 
     function testVendPriceCHEATING() external {
@@ -40,19 +34,6 @@ contract SuVendingTest {
             subject.ownerOf(aSquareId),
             this, 
             "Should vend to correct owner"
-        );
-    }
-
-    function testThisContractHasMoney() public {
-        uint256 originalBalance = address(this).balance;
-
-        // The proxy will not accept money with .send() / .transfer()
-        (new KamikazeAirDrop).value(subject.getSalePrice())(subjectCallProxy);
-
-        Assert.equal(
-            address(this).balance + subject.getSalePrice(),
-            originalBalance,
-            "Should send money"
         );
     }
 
