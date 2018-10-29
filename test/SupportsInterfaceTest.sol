@@ -1,30 +1,28 @@
 pragma solidity ^0.4.24;
 import "truffle/Assert.sol";
-import "./SupportsInterfaceStub.sol";
+import "./mocks/SupportsInterfaceTestMock.sol";
 
 contract SupportsInterfaceTest {
-    SupportsInterfaceStub subject;
+    SupportsInterfaceTestMock subject;
 
     function beforeEach() public {
-        subject = new SupportsInterfaceStub();
+        subject = new SupportsInterfaceTestMock();
     }
 
     // Baseline behavior ///////////////////////////////////////////////////////
 
     function testERC165Id() external {
         bytes4 theInterface = 0x01ffc9a7;
-        Assert.equal(
+        Assert.isTrue(
             subject.supportsInterface(theInterface),
-            true,
             "ERC-165 interface should be supported"
         );
     }
 
     function testFFFFFFFF() external {
         bytes4 theInterface = 0xffffffff;
-        Assert.equal(
+        Assert.isFalse(
             subject.supportsInterface(theInterface),
-            false,
             "The 0xffffffff interface should not be supported"
         );
     }
@@ -33,15 +31,13 @@ contract SupportsInterfaceTest {
 
     function testNewInterface() external {
         bytes4 theInterface = 0xba5eba11;
-        Assert.equal(
+        Assert.isFalse(
             subject.supportsInterface(theInterface),
-            false,
             "The new interface should not be supported"
         );
         subject.setInterface(theInterface);
-        Assert.equal(
+        Assert.isTrue(
             subject.supportsInterface(theInterface),
-            true,
             "The new interface should not be supported"
         );
     } 

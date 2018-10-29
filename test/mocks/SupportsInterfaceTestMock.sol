@@ -1,7 +1,7 @@
 pragma solidity ^0.4.24;
-import "../contracts/SupportsInterface.sol";
+import "../../contracts/SupportsInterface.sol";
 
-contract SupportsInterfaceStub is SupportsInterface {
+contract SupportsInterfaceTestMock is SupportsInterface {
     constructor() public {
     }
 

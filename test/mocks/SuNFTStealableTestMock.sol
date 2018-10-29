@@ -1,7 +1,7 @@
 pragma solidity ^0.4.24;
-import "../contracts/SuOperation.sol";
+import "../../contracts/SuNFT.sol";
 
-contract SuOperationStub is SuOperation {
+contract SuNFTStealableTestMock is SuNFT {
     constructor() public {
     }
 

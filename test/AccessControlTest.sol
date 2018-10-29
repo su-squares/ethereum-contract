@@ -1,12 +1,15 @@
 pragma solidity ^0.4.24;
 import "truffle/Assert.sol";
-import "./AccessControlStub.sol";
+import "./mocks/AccessControlTestMock.sol";
+import "./helpers/CallProxy.sol";
 
 contract AccessControlTest {
-    AccessControlStub subject;
+    AccessControlTestMock subject;
+    CallProxy subjectCallProxy;
 
     function beforeEach() public {
-        subject = new AccessControlStub();
+        subject = new AccessControlTestMock();
+        subjectCallProxy = new CallProxy(subject);
     }
 
     // Me tests ////////////////////////////////////////////////////////////////
@@ -25,16 +28,18 @@ contract AccessControlTest {
         address zeroAddress = 0x0;
         address someAddress = 0x1234;
 
-        Assert.equal(
-            address(subject).call("setExecutiveOfficer", zeroAddress),
-            false,
-            "Should not be able to set CEO to zero address"
-        );
-        subject.setExecutiveOfficer(someAddress);
+        subject.setExecutiveOfficer(subjectCallProxy);
+
+        AccessControlTestMock(address(subjectCallProxy)).setExecutiveOfficer(zeroAddress);
+        Assert.isFalse(subjectCallProxy.callResult(), "Should net be able to set CEO to zero address");
+
+        AccessControlTestMock(address(subjectCallProxy)).setExecutiveOfficer(someAddress);
+        Assert.isTrue(subjectCallProxy.callResult(), "CEO should set to a new value");
+
         Assert.equal(
             subject.executiveOfficerAddress(),
             someAddress,
-            "CEO should set to a new value"
+            "CEO new value should be correct"
         );
     }
 
@@ -52,26 +57,18 @@ contract AccessControlTest {
         address someAddress = 0x1234;
 
         subject.setExecutiveOfficer(someAddress);
-        Assert.equal(
-            address(subject).call("anExecutiveTask"),
-            false,
-            "The not CEO should not be able to run an executive task"
-        );
-        Assert.equal(
-            address(subject).call("setExecutiveOfficer", someAddress),
-            false,
-            "The not CEO should not be able to assign new CEO"
-        );
-        Assert.equal(
-            address(subject).call("setOperatingOfficer", someAddress),
-            false,
-            "The not CEO should not be able to assign new COO"
-        );
-        Assert.equal(
-            address(subject).call("setFinancialOfficer", someAddress),
-            false,
-            "The not CEO should not be able to assign new CFO"
-        );
+
+        AccessControlTestMock(address(subjectCallProxy)).anExecutiveTask();
+        Assert.isFalse(subjectCallProxy.callResult(), "The not CEO should not be able to run an executive task");
+
+        AccessControlTestMock(address(subjectCallProxy)).setExecutiveOfficer(someAddress);
+        Assert.isFalse(subjectCallProxy.callResult(), "The not CEO should not be able to assign new CEO");
+
+        AccessControlTestMock(address(subjectCallProxy)).setOperatingOfficer(someAddress);
+        Assert.isFalse(subjectCallProxy.callResult(), "The not CEO should not be able to assign new COO");
+
+        AccessControlTestMock(address(subjectCallProxy)).setFinancialOfficer(someAddress);
+        Assert.isFalse(subjectCallProxy.callResult(), "The not CEO should not be able to assign new CFO");
     }
 
     // COO Tests ///////////////////////////////////////////////////////////////
@@ -80,12 +77,14 @@ contract AccessControlTest {
         address zeroAddress = 0x0;
         address someAddress = 0x1234;
 
-        Assert.equal(
-            address(subject).call("setOperatingOfficer", zeroAddress),
-            false,
-            "Should not be able to set COO to zero address"
-        );
-        subject.setOperatingOfficer(someAddress);
+        subject.setExecutiveOfficer(subjectCallProxy);
+
+        AccessControlTestMock(address(subjectCallProxy)).setOperatingOfficer(zeroAddress);
+        Assert.isFalse(subjectCallProxy.callResult(), "Should not be able to set COO to zero address");
+
+        AccessControlTestMock(address(subjectCallProxy)).setOperatingOfficer(someAddress);
+        Assert.isTrue(subjectCallProxy.callResult(), "Should be able to set COO to some address");
+
         Assert.equal(
             subject.operatingOfficerAddress(),
             someAddress,
@@ -109,11 +108,8 @@ contract AccessControlTest {
         subject.setExecutiveOfficer(someAddress);
         // We have now renounced CEO privileges
 
-        Assert.equal(
-            address(subject).call("anOperatingTask"),
-            false,
-            "The not COO should not be able to run an operating task"
-        );
+        AccessControlTestMock(address(subjectCallProxy)).anOperatingTask();
+        Assert.isFalse(subjectCallProxy.callResult(), "The not COO should not be able to run an operating task");
     }
 
     // CFO Tests ///////////////////////////////////////////////////////////////
@@ -122,12 +118,14 @@ contract AccessControlTest {
         address zeroAddress = 0x0;
         address someAddress = 0x1234;
 
-        Assert.equal(
-            address(subject).call("setFinancialOfficer", zeroAddress),
-            false,
-            "Should not be able to set CFO to zero address"
-        );
-        subject.setFinancialOfficer(someAddress);
+        subject.setExecutiveOfficer(subjectCallProxy);
+
+        AccessControlTestMock(address(subjectCallProxy)).setFinancialOfficer(zeroAddress);
+        Assert.isFalse(subjectCallProxy.callResult(), "Should not be able to set CFO to zero address");
+
+        AccessControlTestMock(address(subjectCallProxy)).setFinancialOfficer(someAddress);
+        Assert.isTrue(subjectCallProxy.callResult(), "Should be able to set CFO to some address");
+
         Assert.equal(
             subject.financialOfficerAddress(),
             someAddress,
@@ -156,15 +154,10 @@ contract AccessControlTest {
         subject.setFinancialOfficer(someAddress);
         // We have now renounced CEO privileges
 
-        Assert.equal(
-            address(subject).call("aFinancialTask"),
-            false,
-            "The not CFO should not be able to run an operating task"
-        );
-        Assert.equal(
-            address(subject).call("withdrawBalance"),
-            false,
-            "The not CFO should not be able to run an operating task"
-        );
+        AccessControlTestMock(address(subjectCallProxy)).aFinancialTask();
+        Assert.isFalse(subjectCallProxy.callResult(), "The not CFO should not be able to run a financial task");
+
+        AccessControlTestMock(address(subjectCallProxy)).withdrawBalance();
+        Assert.isFalse(subjectCallProxy.callResult(), "The not CFO should not be able to run a financial task");
     }
 }

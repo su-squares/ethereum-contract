@@ -1,29 +1,12 @@
 pragma solidity ^0.4.24;
 import "truffle/Assert.sol";
-import "./SuOperationStub.sol";
-
-// Proxy contract for testing throws
-// Use because .call() problem https://github.com/ethereum/solidity/issues/5321
-contract CallProxy {
-    address private target;
-    bool public callResult;
-
-    constructor(address _target) public {
-        target = _target;
-    }
-
-    function() external payable {
-        callResult = target.call.value(msg.value)(msg.data); // solium-disable-line
-    }
-}
+import "./mocks/SuOperationTestMock.sol";
 
 contract SuOperationTest1 {
-    SuOperationStub subject;
-    CallProxy subjectCallProxy;
+    SuOperationTestMock subject;
 
     function beforeEach() public {
-        subject = new SuOperationStub();
-        subjectCallProxy = new CallProxy(subject);
+        subject = new SuOperationTestMock();
     }
 
     // Personalize and get back data ///////////////////////////////////////////

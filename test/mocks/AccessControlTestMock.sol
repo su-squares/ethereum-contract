@@ -1,7 +1,7 @@
-pragma solidity ^0.4.0;
-import "../contracts/AccessControl.sol";
+pragma solidity ^0.4.24;
+import "../../contracts/AccessControl.sol";
 
-contract AccessControlStub is AccessControl {
+contract AccessControlTestMock is AccessControl {
     constructor() public {
     }
 

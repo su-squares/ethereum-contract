@@ -1,31 +1,17 @@
 pragma solidity ^0.4.24;
 import "truffle/Assert.sol";
-import "./SuOperationStub.sol";
-
-// Proxy contract for testing throws
-// Use because .call() problem https://github.com/ethereum/solidity/issues/5321
-contract CallProxy {
-    address private target;
-    bool public callResult;
-
-    constructor(address _target) public {
-        target = _target;
-    }
-
-    function() external payable {
-        callResult = target.call.value(msg.value)(msg.data); // solium-disable-line
-    }
-}
+import "./mocks/SuOperationTestMock.sol";
+import "./helpers/CallProxy.sol";
 
 contract SuOperationTest3 {
     // https://www.truffleframework.com/docs/truffle/testing/writing-tests-in-solidity#testing-ether-transactions
     uint public initialBalance = 1 ether;
 
-    SuOperationStub subject;
+    SuOperationTestMock subject;
     CallProxy subjectCallProxy;
 
     function beforeEach() public {
-        subject = new SuOperationStub();
+        subject = new SuOperationTestMock();
         subjectCallProxy = new CallProxy(subject);
     }
 
@@ -37,9 +23,9 @@ contract SuOperationTest3 {
         string memory title = "Su Squares: Cute squares you own and personalize";
         string memory href = "https://tenthousandsu.com";
 
-        // SuOperationStub(address(subjectCallProxy)).stealSquare(aSquareId);
+        // SuOperationTestMock(address(subjectCallProxy)).stealSquare(aSquareId);
 
-        SuOperationStub(address(subjectCallProxy)).personalizeSquare(aSquareId, rgbData, title, href);
+        SuOperationTestMock(address(subjectCallProxy)).personalizeSquare(aSquareId, rgbData, title, href);
         Assert.isFalse(subjectCallProxy.callResult(), "Should not personalize a square not owned");
     }
 
@@ -49,9 +35,9 @@ contract SuOperationTest3 {
         string memory title = "Su Squares: Cute squares you own and personalize";
         string memory href = "https://tenthousandsu.com";
 
-        SuOperationStub(address(subjectCallProxy)).stealSquare(aSquareId);
+        SuOperationTestMock(address(subjectCallProxy)).stealSquare(aSquareId);
 
-        SuOperationStub(address(subjectCallProxy)).personalizeSquare(aSquareId, rgbData, title, href);
+        SuOperationTestMock(address(subjectCallProxy)).personalizeSquare(aSquareId, rgbData, title, href);
         Assert.isFalse(subjectCallProxy.callResult(), "Should not personalize with invalid parameters");
     }
 
@@ -61,9 +47,9 @@ contract SuOperationTest3 {
         string memory title = "Su Squares: Cute squares you own and personalize";
         string memory href = "https://tenthousandsu.com";
 
-        SuOperationStub(address(subjectCallProxy)).stealSquare(aSquareId);
+        SuOperationTestMock(address(subjectCallProxy)).stealSquare(aSquareId);
 
-        SuOperationStub(address(subjectCallProxy)).personalizeSquare(aSquareId, rgbData, title, href);
+        SuOperationTestMock(address(subjectCallProxy)).personalizeSquare(aSquareId, rgbData, title, href);
         Assert.isFalse(subjectCallProxy.callResult(), "Should not personalize with invalid parameters");
     }
 
@@ -73,9 +59,9 @@ contract SuOperationTest3 {
         string memory title = "Su Squares: Cute squares you own and personalizexxxxxxxxxxxxxxxxx";
         string memory href = "https://tenthousandsu.com";
 
-        SuOperationStub(address(subjectCallProxy)).stealSquare(aSquareId);
+        SuOperationTestMock(address(subjectCallProxy)).stealSquare(aSquareId);
 
-        SuOperationStub(address(subjectCallProxy)).personalizeSquare(aSquareId, rgbData, title, href);
+        SuOperationTestMock(address(subjectCallProxy)).personalizeSquare(aSquareId, rgbData, title, href);
         Assert.isFalse(subjectCallProxy.callResult(), "Should not personalize with invalid parameters");
     }
 
@@ -85,9 +71,9 @@ contract SuOperationTest3 {
         string memory title = "Su Squares: Cute squares you own and personalize";
         string memory href = "https://tenthousandsu.comxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
-        SuOperationStub(address(subjectCallProxy)).stealSquare(aSquareId);
+        SuOperationTestMock(address(subjectCallProxy)).stealSquare(aSquareId);
 
-        SuOperationStub(address(subjectCallProxy)).personalizeSquare(aSquareId, rgbData, title, href);
+        SuOperationTestMock(address(subjectCallProxy)).personalizeSquare(aSquareId, rgbData, title, href);
         Assert.isFalse(subjectCallProxy.callResult(), "Should not personalize with invalid parameters");
     }
 }
