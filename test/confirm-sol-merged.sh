@@ -24,7 +24,7 @@ SOURCE_FILES="AccessControl.sol ERC165.sol ERC721.sol SupportsInterface.sol SuNF
 
 ls $CONTRACTS_DIRECTORY | sort > build/actual_files
 
-echo "$BUILT_FILE $SOURCE_FILES Migrations.sol" | tr " " "\n" | sort > build/expected_files
+echo "$BUILT_FILE $SOURCE_FILES Migrations.sol mocks" | tr " " "\n" | sort > build/expected_files
 # Boilerplate required, https://github.com/trufflesuite/truffle/issues/1382
 
 diff build/actual_files build/expected_files # Dies if not equal (see set -e)
