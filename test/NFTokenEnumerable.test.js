@@ -32,19 +32,10 @@ contract('NFTokenEnumerableMock', (accounts) => {
     assert.equal(owner, accounts[1]);
   });
 
-  /*
-  SU SQUARES IS PRE MINTED, THIS DOES NOT APPLY
   it('returns the correct total supply', async () => {
-    const totalSupply0 = await nftoken.totalSupply();
-    assert.equal(totalSupply0, 0);
-
-    await nftoken.mint(accounts[1], id1);
-    await nftoken.mint(accounts[1], id2);
-
-    const totalSupply1 = await nftoken.totalSupply();
-    assert.equal(totalSupply1, 2);
+    const totalSupply = await nftoken.totalSupply();
+    assert.equal(totalSupply, 10000);
   });
-  */
 
   it('returns the correct token by index', async () => {
     await nftoken.mint(accounts[1], id1);
