@@ -1,107 +1,42 @@
 # Su Squares Ethereum Contract
 
-**:sunny: BOUNTY ROUND 2 START DATE 2018-07-02 / END DATE 2018-07-07 :crescent_moon:**
+[![Build Status](https://travis-ci.org/su-squares/ethereum-contract.svg?branch=master)](https://travis-ci.org/su-squares/ethereum-contract) [![Join the chat at https://gitter.im/Su-Squares/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Su-Squares/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Thank you to everyone for participating in round one.
+⬛️🔲⬛️ *Su Squares are cute squares you own and personalize. This repository holds the Ethereum smart contract which handles the ownership, personalization and sales logic of Su Squares.* 🔲⬛️🔲
 
-Now that ERC-721 is final status, we are starting a second bounty.
+## Development
 
-**Leaderboard & rewards:**
+We recommend using Remix IDE to develop and test the Su Squares Ethereum Contract.
 
-| Issue                     | Researcher   | Reward            |
-| ------------------------- | ------------ | ----------------- |
-| #3 Clear approval         | @paulbarclay | 1 square          |
-| #2 Incorrect price        | @sz-piotr    | 1 square          |
-| #1 Incorrect comment `[]` | @sz-piotr    | 1 square          |
+1. `git clone https://github.com/su-squares/ethereum-contract.git su-squares-ethereum-contract`
+2. `cd su-squares-ethereum-contract`
+3. `npx remixd -s .`
+4. Open [Remix IDE](http://remix.ethereum.org)
+5. Click the link icon (:link:) on the top to connect
+6. Edit code, and then run tests using the "Testing" tab on the right
 
----
+You can also run tests locally by running `npm test`. Read some [details on how that works](package.json).
 
-**Sponsor this bug bounty if you support ERC-721**. We list you here even if you don't pay out any money. Call us at Su@TenThousandSu.com.
+## Project scope
 
-**Feature this bug bounty on your news website, earn a link here.**
+This repository is open so that you may study the Su Squares Ethereum Contract code and become confident that it works correctly. This project is deployed already and so upgrades are expensive (see [deployment section](#deployment). We always welcome contributions (issues, pull requests) that improve testing of the smart contract. Changes to the smart contract code will be deployed only if they fix a serious problem (see [bug bounty section](#bug-bounty)). Other changes may be accepted into a branch, which might sit there for a long time.
 
-**Now featured on GitCoin, you can check them out here https://twitter.com/GetGitcoin**
+## Deployment
 
-Su Squares Bounty Program recognizes necessity of security researchers to keep our community secure and fun. Su Squares is launching very soon and we will love if the community can help to find and disclose security vulnerabilities via this bounty program.
+Our smart contract deployment process is expensive and requires updating or informing every part of the world that touches the contract. We do not intend to do it often. Each release is expected to be the final release. But we will redeploy if it protects our customers from a documented problem.
 
-## What you need to know about Su Squares
+Read the full [deployment process documentation](DEPLOY.md).
 
-Su Squares are collectable property which you can personalize and show off! Your ownership of this property can't be taken away from you.
+## Bug bounty
 
-Su Squares is the first public implementation of the new final [ERC-721](https://github.com/ethereum/eips/issues/721) standard for non-fungible tokens (deeds).
+You are somebody that reads documentation on smart contracts and understands how Su Squares works. So you have unique skills and your time is valuable. We will pay you for your contributions to Su Squares in the form of bug reports.
 
-You can personalize your Su Square by adding an image, text and a hyperlink to your website
+If your project depends on ERC-721 or you want to help improve the assuarance of this project then you can pledge a bounty. This means you will commit to pay researchers that demonstrate a problem. Contact us at Su@TenThousandSu.com if interested. Thank you.
 
-## The scope of this bounty program
+Read the full [bug bounty program](BUG-BOUNTY.md).
 
-This bounty program will run within the Ropsten network from **2018-03-01 at 00:01 GMT** to **2018-03-04 at 23:59 GMT**. All of the discussions and code in this bounty program are publicly available in this repository. Help us find any problems with this contract and with ERC-721 in general:
+## License
 
-- Overflow or break parts of the program
+Copyright 2018 Su & William Entriken. All rights reserved.
 
-- Steal ownership of a square
-
-- Take over an admin account
-
-- Give a square to somebody else and double spend it or revert it back to your control
-
-- Any undocumented and unintuitive behavior
-
-**The bounty V2 contract is deployed on Ropsten network at [0xa900551bc6208286bb0fcdd1383ee648159b44f9](https://ropsten.etherscan.io/address/0xa900551bc6208286bb0fcdd1383ee648159b44f9)**
-
-## Rules and rewards
-
-- Issues that have already been published here or are already disclosed to the Su Squares team are not eligible for rewards
-
-- Social engineering, XKCD#538 attacks, bringing down Ropsten/Metamask/Infura are not in scope and will NOT be paid a reward
-
-- Only the contract above is in scope, our website is not in scope
-
-- GitHub issues is the only way to report issues and request rewards
-
-- The Su Squares team has complete and final judgement on acceptability of issue reports
-
-Following is a risk threat model that judges the impact of an issue based on its likelihood and impact.
-
-|                 | NOT LIKELY      | —               | VERY LIKELY      |
-| --------------- | --------------- | --------------- | ---------------- |
-| **HIGH IMPACT** | Medium severity | High severity   | Highest severity |
-| —               | Low severity    | Medium severity | High severity    |
-| **LOW IMPACT**  | Notable         | Low severity    | Medium severity  |
-
-Rewards:
-
-* **High / highest severity** — you will received two Su Squares on the deployed website (worth $1000 USD)
-* **Low / medium / high / highest** — all of these reports will receive an honorable mention, which is also visible from the final Su Squares website
-* Additional rewards may be announced, want to sponsor? Contact us at Su@TenThousandSu.com
-
-Examples of impact:
-
-* High: Steal a square from someone else, impersonate an admin
-* Medium: Cause personalization to fail so that the wrong data goes on the block chain
-* Low: Cause a transaction counterparty that carefully reads the contract documentation to make a mistake on some edge case type of transaction
-
-How to win:
-
-* Be descriptive and detailed when describing your issue
-* Fix it — recommend a way to solve the problem
-* Include a truffle or detailed test case that we can reproduce
-
-Rules for bounty sponsor:
-
-* We will respond quickly to your questions (within 2 business days)
-* We will adjudicate all prizes quickly (within 5 business days)
-* Bounty sponsors are not eligible
-
-## More questions
-
-* Can I use this code in my project?
-  * No. This code is provided to you solely for this security research program, please do not use it for other purposes.
-* Will things change during the bounty program?
-  * Yes, we are seeking sponsors and will add additional prizes here if that happens.
-  * Yes, we will update the code and redeploy the contract. So, click STAR and WATCH above on this repo for updates.
-* Taxes?
-  * If sponsors give us so much money that you will need to fill out a tax form, then we will ask you to fill out a tax form. This whole program is subject to the laws of Pennsylvania.
-* I read to the bottom of the file.
-  *  That's not even a question. Good, you're the type of person we're seeking. Here's a hint, you can see the [CryptoKitties bounty program](https://github.com/axiomzen/cryptokitties-bounty) and everything that happened there. We stole lots of ideas from them, thank you. And see also [the Su Squares Gitter](https://gitter.im/Su-Squares/Lobby#).
-
-Copyright 2018 William & Su Entriken. All rights reserved.
+We commit to rerelease this project under the MIT license when 20% of the squares have been sold. At that time we will also release our back-end scripts and other code that you might be interested in also under MIT license.
