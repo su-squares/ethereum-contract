@@ -93,7 +93,7 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, SupportsInte
         returns (address _owner)
     {
         _owner = _tokenOwnerWithSubstitutions[_tokenId];
-        // Handle substitutions
+        // Do owner address substitution
         if (_owner == address(0)) {
             _owner = address(this);
         }
@@ -144,7 +144,7 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, SupportsInte
         canTransfer(_tokenId)
     {
         address owner = _tokenOwnerWithSubstitutions[_tokenId];
-        // Handle substitutions
+        // Do owner address substitution
         if (owner == address(0)) {
             owner = address(this);
         }
@@ -166,7 +166,7 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, SupportsInte
         canOperate(_tokenId)
     {
         address _owner = _tokenOwnerWithSubstitutions[_tokenId];
-        // Handle substitutions
+        // Do owner address substitution
         if (_owner == address(0)) {
             _owner = address(this);
         }
@@ -286,32 +286,35 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, SupportsInte
         require(_to != address(0));
 
         // Find the FROM address
-        address fromWithSubstitution = _tokenOwnerWithSubstitutions[_tokenId];
-        address from = fromWithSubstitution;
-        if (fromWithSubstitution == address(0)) {
+        address from = _tokenOwnerWithSubstitutions[_tokenId];
+        // Do owner address substitution
+        if (from == address(0)) {
             from = address(this);
         }
 
         // Take away from the FROM address
         // The Entriken algorithm for deleting from an indexed, unsorted array
-        uint256 indexToDeleteWithSubstitution = _ownedTokensIndexWithSubstitutions[_tokenId];
-        uint256 indexToDelete;
-        if (indexToDeleteWithSubstitution == 0) {
+        uint256 indexToDelete = _ownedTokensIndexWithSubstitutions[_tokenId];
+        // Do owned tokens substitution
+        if (indexToDelete == 0) {
             indexToDelete = _tokenId - 1;
         } else {
-            indexToDelete = indexToDeleteWithSubstitution - 1;
+            indexToDelete = indexToDelete - 1;
         }
+        // We can only shrink an array from its end. If the item we want to
+        // delete is in the middle then copy last item to middle and shrink
+        // the end.
         if (indexToDelete != _tokensOfOwnerWithSubstitutions[from].length - 1) {
-            uint256 lastNftWithSubstitution = _tokensOfOwnerWithSubstitutions[from][_tokensOfOwnerWithSubstitutions[from].length - 1];
-            uint256 lastNft = lastNftWithSubstitution;
-            if (lastNftWithSubstitution == 0) {
+            uint256 lastNft = _tokensOfOwnerWithSubstitutions[from][_tokensOfOwnerWithSubstitutions[from].length - 1];
+            // Do tokens of owner substitution
+            if (lastNft == 0) {
                 // assert(from ==  address(0) || from == address(this));
-                lastNft = _tokensOfOwnerWithSubstitutions[from].length;
+                lastNft = _tokensOfOwnerWithSubstitutions[from].length; // - 1 + 1
             }
             _tokensOfOwnerWithSubstitutions[from][indexToDelete] = lastNft;
             _ownedTokensIndexWithSubstitutions[lastNft] = indexToDelete + 1;
         }
-        delete _tokensOfOwnerWithSubstitutions[from][_tokensOfOwnerWithSubstitutions[from].length - 1]; // get gas back
+        // Next line also deletes the contents at the last position of the array (gas refund)
         _tokensOfOwnerWithSubstitutions[from].length--;
         // Right now _ownedTokensIndexWithSubstitutions[_tokenId] is invalid, set it below based on the new owner
 
@@ -337,22 +340,25 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, SupportsInte
     ///  If value != address(0), NFT is owned by value
     ///  assert(This contract never assigns ownership to address(0) or destroys NFTs)
     ///  See commented out code in constructor, saves hella gas
+    ///  In other words address(0) in storage means address(this) outside
     mapping (uint256 => address) private _tokenOwnerWithSubstitutions;
 
     /// @dev The list of NFTs owned by each address
-    ///  Nomenclature: this[key][index] = value
+    ///  Nomenclature: arr[key][index] = value
     ///  If key != address(this) or value != 0, then value represents an NFT
     ///  If key == address(this) and value == 0, then index + 1 is the NFT
     ///  assert(0 is not a valid NFT)
     ///  See commented out code in constructor, saves hella gas
+    ///  In other words [0, 0, a, 0] is equivalent to [1, 2, a, 4] for address(this)
     mapping (address => uint256[]) private _tokensOfOwnerWithSubstitutions;
 
     /// @dev (Location + 1) of each NFT in its owner's list
-    ///  Nomenclature: this[key] = value
+    ///  Nomenclature: arr[nftId] = value
     ///  If value != 0, _tokensOfOwnerWithSubstitutions[owner][value - 1] = nftId
-    ///  If value == 0, _tokensOfOwnerWithSubstitutions[owner][key - 1] = nftId
+    ///  If value == 0, _tokensOfOwnerWithSubstitutions[owner][nftId - 1] = nftId
     ///  assert(2**256-1 is not a valid NFT)
     ///  See commented out code in constructor, saves hella gas
+    ///  In other words mapping {a=>a} is equivalent to {a=>0}
     mapping (uint256 => uint256) private _ownedTokensIndexWithSubstitutions;
 
     // Due to implementation choices (no mint, no burn, contiguous NFT ids), it
@@ -393,7 +399,7 @@ contract SuNFT is ERC165, ERC721, ERC721Metadata, ERC721Enumerable, SupportsInte
         canTransfer(_tokenId)
     {
         address owner = _tokenOwnerWithSubstitutions[_tokenId];
-        // Handle substitutions
+        // Do owner address substitution
         if (owner == address(0)) {
             owner = address(this);
         }
