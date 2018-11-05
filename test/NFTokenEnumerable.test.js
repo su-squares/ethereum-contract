@@ -85,7 +85,6 @@ contract('NFTokenEnumerableMock', (accounts) => {
     const jane = accounts[2];
 
     await nftoken.mint(bob, id2);
-
     await nftoken.approve(jane, id2, { from: bob });
     await nftoken.transferFrom(bob, nftoken.address, id2, { from: jane });
     tokenId = await nftoken.tokenOfOwnerByIndex(nftoken.address, 1);
