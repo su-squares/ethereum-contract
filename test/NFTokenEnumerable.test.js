@@ -32,24 +32,29 @@ contract('NFTokenEnumerableMock', (accounts) => {
     assert.equal(owner, accounts[1]);
   });
 
-  /*
-  SU SQUARES IS PRE MINTED, THIS DOES NOT APPLY
   it('returns the correct total supply', async () => {
-    const totalSupply0 = await nftoken.totalSupply();
-    assert.equal(totalSupply0, 0);
-
-    await nftoken.mint(accounts[1], id1);
-    await nftoken.mint(accounts[1], id2);
-
-    const totalSupply1 = await nftoken.totalSupply();
-    assert.equal(totalSupply1, 2);
+    const totalSupply = await nftoken.totalSupply();
+    assert.equal(totalSupply, 10000);
   });
-  */
 
   it('returns the correct token by index', async () => {
     await nftoken.mint(accounts[1], id1);
     await nftoken.mint(accounts[1], id2);
     await nftoken.mint(accounts[2], id3);
+
+    let tokenId = await nftoken.tokenByIndex(0);
+    assert.equal(tokenId, id1);
+
+    tokenId = await nftoken.tokenByIndex(1);
+    assert.equal(tokenId, id2);
+
+    tokenId = await nftoken.tokenByIndex(2);
+    assert.equal(tokenId, id3);
+  });
+
+  it('returns the correct token by index', async () => {
+    await nftoken.mint(accounts[1], id1);
+    await nftoken.mint(accounts[1], id2);
 
     let tokenId = await nftoken.tokenByIndex(0);
     assert.equal(tokenId, id1);
@@ -74,6 +79,48 @@ contract('NFTokenEnumerableMock', (accounts) => {
     const tokenId = await nftoken.tokenOfOwnerByIndex(accounts[1], 1);
     assert.equal(tokenId, id2);
   });
+
+  it('returns the correct token of owner by index after transfering a token back to the contract', async () => {
+    const bob = accounts[1];
+    const jane = accounts[2];
+
+    await nftoken.mint(bob, id2);
+    await nftoken.approve(jane, id2, { from: bob });
+    await nftoken.transferFrom(bob, nftoken.address, id2, { from: jane });
+    tokenId = await nftoken.tokenOfOwnerByIndex(nftoken.address, 1);
+    assert.equal(tokenId, 10000);
+    tokenId = await nftoken.tokenOfOwnerByIndex(nftoken.address, 9999);
+    assert.equal(tokenId, 2);
+  });
+
+  it('returns the correct token of owner by index after multiple transfers', async () => {
+    const bob = accounts[1];
+    const jane = accounts[2];
+    const sara = accounts[3];
+
+    await nftoken.mint(bob, id1);
+    await nftoken.mint(bob, id2);
+
+    await nftoken.approve(jane, id2, { from: bob });
+    await nftoken.transferFrom(bob, sara, id2, { from: jane });
+
+    let tokenId = await nftoken.tokenOfOwnerByIndex(bob, 0);
+    assert.equal(tokenId, id1);
+
+    await assertRevert(nftoken.tokenOfOwnerByIndex(bob, 1));
+
+    tokenId = await nftoken.tokenOfOwnerByIndex(sara, 0);
+    assert.equal(tokenId, id2);
+
+    await nftoken.approve(jane, id2, { from: sara });
+    await nftoken.transferFrom(sara, bob, id2, { from: jane });
+
+    await assertRevert(nftoken.tokenOfOwnerByIndex(sara, 0));
+
+    tokenId = await nftoken.tokenOfOwnerByIndex(bob, 1);
+    assert.equal(tokenId, id2);
+  });
+
 
   it('throws when trying to get token of owner by non-existing index', async () => {
     await nftoken.mint(accounts[1], id1);

@@ -35,17 +35,10 @@ contract('NFTokenMetadataMock', (accounts) => {
     assert.equal(symbol, expectedSymbol);
   });
 
-  /*
-  SU SQUARES USES A DIFFERENT URL SCHEME
   it('correctly mints and checks NFT id 2 url', async () => {
-    const { logs } = await nftoken.mint(accounts[1], id2);
-    const transferEvent = logs.find(e => e.event === 'Transfer');
-    assert.notEqual(transferEvent, undefined);
-
     const tokenURI = await nftoken.tokenURI(id2);
-    assert.equal(tokenURI, 'url2');
+    assert.equal(tokenURI, 'https://tenthousandsu.com/erc721/00002.json');
   });
-  */
 
   it('throws when trying to get URI of invalid NFT ID', async () => {
     await assertRevert(nftoken.tokenURI(id4));
