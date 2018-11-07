@@ -24,16 +24,19 @@ SOURCE_FILES="AccessControl.sol ERC165.sol ERC721.sol SupportsInterface.sol SuNF
 
 ls $CONTRACTS_DIRECTORY | sort > build/actual_files
 
-echo "$BUILT_FILE $SOURCE_FILES" | tr " " "\n" | sort > build/expected_files
+echo "$BUILT_FILE $SOURCE_FILES Migrations.sol mocks" | tr " " "\n" | sort > build/expected_files
+# Boilerplate required, https://github.com/trufflesuite/truffle/issues/1382
 
 diff build/actual_files build/expected_files # Dies if not equal (see set -e)
+echo "GOOD: Files in contracts/ match our expected files"
 
 
 ## Test 2 -- Confirm compiler versions match ###################################
 
 UNIQUE_VERSIONS=$(grep -h '^pragma solidity' contracts/* | sort -u | wc -l)
 
-expr "$UNIQUE_VERSIONS = 1" # Quoting fixes whitespace from wc command
+expr "$UNIQUE_VERSIONS = 1" > /dev/null
+echo "GOOD: All files use the same Solidity version"
 
 
 ## Test 3 -- Confirm files match ###############################################
@@ -55,3 +58,6 @@ expr "$UNIQUE_VERSIONS = 1" # Quoting fixes whitespace from wc command
 ) > build/individual
 
 diff -B build/combined build/individual # Ignore changes in blank links
+echo "GOOD: $BUILT_FILE matches contents of expected files"
+echo "DONE: confirm-sol-merged.sh test passed"
+echo
