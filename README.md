@@ -39,4 +39,4 @@ Read the full [bug bounty program](BUG-BOUNTY.md).
 
 Copyright 2018 Su & William Entriken. All rights reserved.
 
-We commit to rerelease this project under the MIT license when 20% of the squares have been sold. At that time we will also release our back-end scripts and other code that you might be interested in also under MIT license.
+We commit to rerelease this project under the MIT license when 10% of the squares have been sold. At that time we will also release our back-end scripts and other code that you might be interested in also under MIT license.
