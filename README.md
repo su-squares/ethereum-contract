@@ -1,6 +1,6 @@
 # Su Squares Ethereum Contract
 
-[![Build Status](https://travis-ci.org/su-squares/ethereum-contract.svg?branch=master)](https://travis-ci.org/su-squares/ethereum-contract) [![Join the chat at https://gitter.im/Su-Squares/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Su-Squares/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/su-squares/ethereum-contract.svg?branch=master)](https://travis-ci.org/su-squares/ethereum-contract)
 
 ⬛️🔲⬛️ *Su Squares are cute squares you own and personalize. This repository holds the Ethereum smart contract which handles the ownership, personalization and sales logic of Su Squares.* 🔲⬛️🔲
 
