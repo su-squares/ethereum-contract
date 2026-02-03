@@ -1,10 +1,12 @@
 {
+  "type": "module",
   "scripts": {
-    "clean": "rm -rf ./build",
-    "compile": "truffle compile",
-    "test": "npm run clean && sh test/confirm-sol-merged.sh && npm run compile && truffle test"
+    "clean": "rm -rf ./artifacts ./cache",
+    "compile": "hardhat build",
+    "test": "npm run clean && sh test/confirm-sol-merged.sh && hardhat test"
   },
   "devDependencies": {
-    "truffle": "^4.1.14"
+    "@nomicfoundation/hardhat-toolbox-mocha-ethers": "^3.0.0",
+    "hardhat": "^3.0.0"
   }
 }

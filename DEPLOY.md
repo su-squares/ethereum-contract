@@ -2,7 +2,7 @@
 
 *This is the full process for deploying a new version of the Su Squares smart contract. It costs money, it is painful. Measure twice, cut once!*
 
-1. :warning: Warn the public at https://tenthousandsu.com
+1. :warning: Warn the public at <https://tenthousandsu.com>
 2. Edit code in the contracts folder
 
    1. Recompile `ALLINONE.sol` file, make sure it matches (automated build test)
@@ -13,9 +13,9 @@
    1. Delete all storage, add ALLINONE.sol, select `SuMain`, enable optimization, compile
 
    1. Save code to Gist (workaround for Etherscan bug)
-   2. Save the bytecode to `bytecode.json`, this is a release artifact
-   3. Save the ABI to `abi.json`, this is a release artifact
-   4. Record the compiler version number
+   1. Save the bytecode to `bytecode.json`, this is a release artifact
+   1. Save the ABI to `abi.json`, this is a release artifact
+   1. Record the compiler version number
 4. Use Remix IDE with CEO account to deploy contract
    1. Record the deployed address
    2. `setFinancialOfficer` `"0x7Ca2Cf38e9dbB925e584398E5D63F1A8F0B731f9"`
@@ -39,8 +39,8 @@
    2. Update address in the white paper (NOTE OLD ADDRESS)
    3. Remove any (WE ARE UPGRADING) note on index.html
 9. Tell the world
-   1. Make a release on smart contract GitHub project / add release artifacts / update the project URL to new etherscan contract https://github.com/su-squares/ethereum-contract
-   2. Update address at https://github.com/MyEtherWallet/ethereum-lists/blob/master/contracts/contract-abi-eth.json
+   1. Make a release on smart contract GitHub project / add release artifacts / update the project URL to new etherscan contract <https://github.com/su-squares/ethereum-contract>
+   2. Update address at <https://github.com/MyEtherWallet/ethereum-lists/blob/master/contracts/contract-abi-eth.json>
    3. Relist opensea
    4. Relist coingecko
    5. Email anybody that bought squares, if I know them somehow

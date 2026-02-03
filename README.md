@@ -31,7 +31,7 @@ Read the full [deployment process documentation](DEPLOY.md).
 
 You are somebody that reads documentation on smart contracts and understands how Su Squares works. So you have unique skills and your time is valuable. We will pay you for your contributions to Su Squares in the form of bug reports.
 
-If your project depends on ERC-721 or you want to help improve the assuarance of this project then you can pledge a bounty. This means you will commit to pay researchers that demonstrate a problem. Contact us at Su@TenThousandSu.com if interested. Thank you.
+If your project depends on ERC-721 or you want to help improve the assuarance of this project then you can pledge a bounty. This means you will commit to pay researchers that demonstrate a problem. Contact us at <Su@TenThousandSu.com> if interested. Thank you.
 
 Read the full [bug bounty program](BUG-BOUNTY.md).
 
